@@ -19,7 +19,7 @@ class CustomUserManager(BaseUserManager):
         return self.create_user(email, password, **extra_fields)
 
 
-class user(AbstractBaseUser, PermissionsMixin):
+class User(AbstractBaseUser, PermissionsMixin):
     password = models.CharField(max_length=20)
     username = models.CharField(max_length=20, unique=True)
     email = models.EmailField(unique=True)
@@ -31,8 +31,8 @@ class user(AbstractBaseUser, PermissionsMixin):
 
     objects = CustomUserManager()
 
-    USERNAME_FIELD = 'username'
-    REQUIRED_FIELDS = [ 'phone_number' , 'email' , 'password']
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['password']
 
     def __str__(self):
         return self.username
@@ -52,7 +52,7 @@ class Offerm(models.Model):
 class Review(models.Model):
     rating = models.IntegerField()
     comment = models.TextField()
-    author = models.ForeignKey(user, on_delete=models.CASCADE)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
 
 
 
@@ -73,7 +73,7 @@ class OfferImage(models.Model):
     caption = models.CharField(max_length=255)
 
 class Booking(models.Model):
-    client = models.ForeignKey(user, on_delete=models.CASCADE)
+    client = models.ForeignKey(User, on_delete=models.CASCADE)
     offer = models.ForeignKey(Offerm, on_delete=models.CASCADE)
     booking_date = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=100)
