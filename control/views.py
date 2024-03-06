@@ -1,34 +1,19 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login
 from django.contrib import messages
-from .models import user
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from .models import User
 from .models import CustomUserManager
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.urls import reverse_lazy
 
 
 
-def create(request):
-    if request.method == 'POST':
-        user = CustomUserManager()
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        email = request.POST.get('email')
-        print(username)
-        data = user.create_user(username = username, password = password, email = email)
-        print(username)
-        if user is not None:
-            if user.objects.filter(username=username).exists():
-                    error_message = "Username already exists. Please choose a different username."
-                    return render(request, 'clients/create.html', {'error_message': error_message})
-            else:
-                data.save()   
-                error_message = ''
-                user = user.objects.filter(username=username).first()
-                login(request, user)
-                return redirect('profile')
-    if request.method == 'GET':
-         return render(request, 'clients/create.html')  
-    
-    
+class CreateUser(CreateView):
+    model = User
+    fields = ['email', 'first_name', 'last_name', 'password']
+    template_name = 'clients/create.html'
+    success_url = reverse_lazy('profile')
 
 
 def loginn(request):
