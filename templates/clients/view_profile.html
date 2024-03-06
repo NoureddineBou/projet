@@ -1,0 +1,19 @@
+<!-- view_profile.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Profile</title>
+</head>
+<body>
+    <h2>User Profile</h2>
+    <form action="POST">
+    {% csrf_token %}
+    <p><strong>Username:</strong> {{ user.username }}</p>
+    <p><strong>Email:</strong> {{ user.email }}</p>
+    <a href="../../">home page</a>
+    <!-- Add more profile fields as needed -->
+    </form>
+</body>
+</html>
